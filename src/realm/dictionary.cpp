@@ -793,6 +793,9 @@ void Dictionary::erase(Mixed key)
                     else {
                         links.erase(sz - 1);
                     }
+                    if (fields.has_missing_parent_update()) {
+                        m_clusters->update_ref_in_parent(k, fields.get_ref());
+                    }
                     auto state2 = m_clusters->get(k2);
                     swap_content(state, state2);
 
@@ -816,15 +819,14 @@ void Dictionary::erase(Mixed key)
                             else {
                                 links.erase(i);
                             }
+                            if (fields.has_missing_parent_update()) {
+                                m_clusters->update_ref_in_parent(k, fields.get_ref());
+                            }
                             break;
                         }
                         i++;
                         REALM_ASSERT_RELEASE(i < sz);
                     }
-                }
-
-                if (fields.has_missing_parent_update()) {
-                    m_clusters->update_ref_in_parent(k, fields.get_ref());
                 }
             }
             else {
